@@ -94,13 +94,30 @@
             const quantity500 = document.getElementById("quantity500").value;
             const total = (quantity200 * 20 + quantity500 * 35).toFixed(2);
             
-            let message = "Ciao! Confermo ordine per Anima:\n";
-            if (quantity200 > 0) message += `- ${quantity200} x 200ml (20€)\n`;
-            if (quantity500 > 0) message += `- ${quantity500} x 500ml (35€)\n`;
-            message += `Totale: ${total}€`;
-            
-            const whatsappURL = `https://wa.me/393717771328?text=${encodeURIComponent(message)}`;
-            window.open(whatsappURL, "_blank");
+           function confirmOrder() {
+            let cart = JSON.parse(localStorage.getItem("cart")) || [];
+            if (cart.length === 0) return;
+
+            let message = `🟢 *ORDINE MYSENZA1* 🟢\n\n`;
+            message += `📌 *Ciao! Ecco il mio ordine:*\n\n`;
+
+            cart.forEach(item => {
+                message += `🔵 *${item.name}* ${item.size} × ${item.quantity} = *${item.price * item.quantity}€*\n`;
+            });
+
+            message += `------------------------------------\n`;
+            message += `🛍️ *TOTALE ORDINE:* *${document.getElementById("cart-total").textContent}*\n`;
+            message += `------------------------------------\n\n`;
+            message += `📩 *Attendo conferma, grazie!* 🔝\n\n`;
+
+            window.open(`https://wa.me/393717771328?text=${encodeURIComponent(message)}`, "_blank");
+
+            clearCart();
+        }
+
+        function clearCart() {
+            localStorage.removeItem("cart");
+            updateCart();
         }
     </script>
 </body>
